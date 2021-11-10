@@ -2,13 +2,22 @@ import React from 'react';
 import {render} from '@testing-library/react';
 import EmptyResult from "../EmptyResult";
 
+const setup = (props = {}) => {
+    const renderResult = render(<EmptyResult {...props} />);
+
+    return {
+        image: renderResult.getByAltText('/empty result/i'),
+        ...renderResult,
+        
+    }
+};
+
 describe('EmptyResult', () => {
     test('should render with default props', () => {
-        const {container, getByAltText,getByText} = render(<EmptyResult/>);
+        const {container, getByText, image} = setup();
         const defaultMessage = 'Oops... Não encontramos nada.';
         const defautlWidth = 200;
 
-        const image = getByAltText('/empty result/i');
 
         expect(container).toBeInTheDocument();
         expect(getByText(defaultMessage)).toBeInTheDocument();
@@ -18,14 +27,15 @@ describe('EmptyResult', () => {
 
     test('image should have correct width', () => {
         const width = 150;
-        const {getByText} = render(<EmptyResult width={}/>);
+        const {image} = setup({width});
 
-        const image = getByText('EmptyResult');
         expect(image.width).toBe(width);
     });
 
     test('should render with message', () => {
         const message = 'Nova message';
-        const {getByText} = render(<EmptyResult message={message}/>);
+        const {getByText} = setup({message});
+
+        expect(getByText(message)).toBeInTheDocument();
     })
 });
