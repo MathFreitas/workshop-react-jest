@@ -2,6 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import PokemonCard from "../PokemonCard";
 import { cardBuilder } from "../../../__mocks__/card-builder";
+import { set } from "lodash";
 
 const setup = ({card, onClick}) => {
     const defaultCard = card || cardBuilder(); 
@@ -22,6 +23,16 @@ describe('PokemonCard', () => {
         expect(container).toBeInTheDocument();
         expect(image).toBeInTheDocument();
     });
+
+    test('should emit onClick event', () => {
+        const onClick = jest.fn();
+
+        const {image} = setup({onClick});
+
+        image.click();
+
+        expect(onClick).toHaveBeenCalledTimes(1);
+    })
 });
 
 
